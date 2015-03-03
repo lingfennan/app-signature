@@ -1,0 +1,5 @@
+Read ad fraud paper.
+repackage detection papers, how the similarity is compared
+	call dependency graph, data dependency graph, program dependency graph
+
+
