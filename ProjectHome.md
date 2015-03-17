@@ -1,0 +1,1 @@
+Map app into fixed bits and use this signature for re-packaging detection.
