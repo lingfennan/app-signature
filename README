@@ -1,1 +1,7 @@
 This project aims at generating scalable signatures for apps.
+
+
+nvmtrace
+	Proof-of-concept automated baremetal malware analysis framework.
+
+
