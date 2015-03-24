@@ -1,0 +1,3 @@
+1. apktool de-package 116 unofficial apps from Chenxiong, only 1 GPL license in smali code.
+Solution: many apps have JNI and use IDA Pro to decompile.
+2. intermediate representation of apps.
