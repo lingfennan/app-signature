@@ -3,5 +3,11 @@ This project aims at generating scalable signatures for apps.
 
 nvmtrace
 	Proof-of-concept automated baremetal malware analysis framework.
+Pillow, scipy, numpy
+	Image packages used.
 
+
+Commands:
+For dependency on imread
+	sudo pip install Pillow==2.6.0
 

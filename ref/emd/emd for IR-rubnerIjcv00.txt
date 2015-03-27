@@ -1,0 +1,55 @@
+# title: The Earth Mover's Distance as a Metric for Image Retrieval
+# name: Ruian Duan
+# date: 03/27/2015
+
+1. what's the problem?
+The Earth Mover Distance (EMD) is based on the minimal cost that must be paid to
+transform one distribution into the other. Detail description is:
+http://homepages.inf.ed.ac.uk/rbf/CVonline/LOCAL_COPIES/RUBNER/emd.htm
+
+This paper combines this EMD with a representation scheme for distributions that
+is based on vector quantization. This combination leads to an image comparison
+framework that often accounts for perceptual similarity better than other
+previously proposed methods. They focus on applications to color and texture,
+and compared the retrieval performance of the EMD with that of other distances.
+
+2. why should we care?
+a. Naturally extends the notion of a distance between single elements to that of a 
+distance between sets, or distributions, of elements
+b. Can be applied to the more general variable-size signatures, which subsume
+histograms. Signatures are more compact, and the cost of moving ``earth''
+reflects the notion of nearness properly, without the quantization problems of
+most other measures. 
+c. Allows for partial matches in a very natural way. This is important, for
+instance, for image retrieval and in order to deal with occlusions and clutter.
+d. Is a true metric if the ground distance is metric and if the total weights of
+two signatures are equal. This allows endowing image spaces with a metric
+structure.
+e. Is bounded from below by the distance between the centers of mass of the two
+signatures when the ground distance is induced by a norm. Using this lower bound
+in retrieval systems significantly reduced the number of EMD computations.
+f. Matches perceptual similarity better than other measures, when the ground
+distance is perceptually meaningful. This was shown by for color- and
+texture-based image retrieval.
+
+3. what's the key idea to solve this problem?
+Represent each picture with a set of weighted features (color, texture), privide
+definition for cost between signatures and compute the Earth Mover Distance
+between two distributions (representation of two images).
+
+4. how can we believe their solution?
+Their feature representation makes sense. But from later papers, we can see
+histograms seems to perform better than features given enough number of
+histograms (this paper states that, large number of histograms is too slow).
+
+5. anything surprising?
+The L2-norm distance definition for color is tricky and makes sense.
+d = sqrt( dl^2 + da^2 + db^2 + lambda(dx^2 + dy^2) )
+
+6. what can we get from their approach?
+a. The way to compute color features and texture features is interesting and
+should be considered.
+b. How to build relationship between EMD and Simhash need to be further looked
+into, especially in case of color and texture.
+c. Gradient information might be useful.
+
