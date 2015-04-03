@@ -1,0 +1,18 @@
+Meeting notes
+App signature
+1.repackage app detection
+2.localize the modified part
+3.icon comparison?
+
+Javascript
+problem: malicious javascript pattern? popup page features and pattern?
+0.compilation of Javascript? how is this done?
+1.javascript, analyze the call trace, slice them and learn pattern
+2.use PDA or FDA to dynamically check the call trace and match them
+
+EMD Related Ideas
+1.Test App Component Inclusion with EMD (FastEMD ?)
+Component-wise code re-use detection, copyright violation detection
+2.Compare two graphs with EMD?
+3.How about that?
+

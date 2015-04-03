@@ -1,0 +1,24 @@
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=mex 2014.5.25)  29 MAR 2015 18:46
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**CXX=g++ CC=g++ LD=g++ COMPFLAGS=-O -DNDEBUG  emd_hat_gd_metric_mex.cxx
+(/usr/local/texlive/2014/texmf-dist/tex/latex/tools/q.tex
+! Interruption.
+<to be read again> 
+                   \immediate 
+<everyjob> \immediate 
+                      \write 16{This is MeX  Version 1.05  18 XII 1993  (B. ...
+l.1 
+    %%
+? 
+! Emergency stop.
+<to be read again> 
+                   \immediate 
+<everyjob> \immediate 
+                      \write 16{This is MeX  Version 1.05  18 XII 1993  (B. ...
+l.1 
+    %%
+End of file on the terminal!
+
+No pages of output.
