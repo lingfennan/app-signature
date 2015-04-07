@@ -1,0 +1,45 @@
+package image_features;
+
+message AllImages {
+  repeated Image image = 1;
+  optional string timestamp = 2;
+  optional FeatureExtractorConfig extractor_config = 3;
+}
+
+message Image {
+  required string path = 1;
+  repeated ImageFeature image_feature = 2;
+}
+
+message ImageFeature {
+  enum FeatureType {
+    HarrisCorner = 0;
+    ShiTomasiCorner = 1;
+    SIFT = 2;
+    SURF = 3;
+    FAST = 4;
+    BRIEF = 5;
+    ORB = 6;
+    // Add more feature type here.
+  }
+  required FeatureType type = 1;
+  repeated Feature key_value = 2;
+}
+
+message Feature {
+  required string name = 1;
+  optional int32 int_value = 2 [default = 1];
+  optional double double_value = 3;
+  optional string string_value = 4;
+}
+
+message FeatureExtractorConfig {
+  // Types of features to extract from an image.
+  optional bool harris_corner = 1 [default = false];
+  optional bool shitomasi_corner = 2 [default = true];
+  optional bool sift = 3 [default = false];
+  optional bool surf = 4 [default = true];
+  optional bool fast = 5 [default = true];
+  optional bool brief = 6 [default = true];
+  optional bool orb = 7 [default = true];
+}
