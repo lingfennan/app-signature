@@ -1,0 +1,6 @@
+Title: The Earth Mover's Distance as a Metric for Image Retrieval
+
+Code for the Earth Movers Distance (EMD)
+http://ai.stanford.edu/~rubner/emd/default.htm
+
+
