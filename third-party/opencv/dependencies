@@ -1,0 +1,9 @@
+1.Remove default python binding if present:
+	sudo apt-get purge python-opencv
+
+2.Install and build opencv-2.4.10
+	http://docs.opencv.org/doc/tutorials/introduction/linux_install/linux_install.html#linux-installation
+	http://www.samontab.com/web/2014/06/installing-opencv-2-4-9-in-ubuntu-14-04-lts/
+
+3.Extra dependencies
+	sudo apt-get install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libgstreamer0.10-dev libgstreamer-plugins-base0.10-dev

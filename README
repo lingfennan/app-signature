@@ -5,7 +5,8 @@ nvmtrace
 	Proof-of-concept automated baremetal malware analysis framework.
 Pillow, scipy, numpy
 	Image packages used.
-
+opencv-2.4.10
+	Download and compile. Don't install python-opencv (which is opencv-2.4.8), since cv2.SIFT doesn't work.
 
 Commands:
 For dependency on imread
