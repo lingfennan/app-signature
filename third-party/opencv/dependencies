@@ -7,3 +7,6 @@
 
 3.Extra dependencies
 	sudo apt-get install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libgstreamer0.10-dev libgstreamer-plugins-base0.10-dev
+
+4.Build and install opencv-3.0.0-beta
+	http://milq.github.io/install-opencv-ubuntu-debian/
