@@ -7,6 +7,11 @@ Pillow, scipy, numpy
 	Image packages used.
 opencv-2.4.10
 	Download and compile. Don't install python-opencv (which is opencv-2.4.8), since cv2.SIFT doesn't work.
+dex2jar
+	Convert dex format to java byte code.
+	http://sourceforge.net/p/dex2jar/wiki/Faq/
+wala
+	analysis tools for javascript and java.
 
 Commands:
 For dependency on imread
