@@ -6,17 +6,14 @@ Pillow, scipy, numpy
 	Image packages used.
 opencv-2.4.10
 	Download and compile. Don't install python-opencv (which is opencv-2.4.8), since cv2.SIFT doesn't work.
-<<<<<<< HEAD
 python-tesseract
 	use tesseract with opencv. Use python-tesseract_0.9-0.1ubuntu_amd64.deb. Other versions have problems.
 	https://code.google.com/p/python-tesseract/wiki/CodeSnippets
-=======
 dex2jar
 	Convert dex format to java byte code.
 	http://sourceforge.net/p/dex2jar/wiki/Faq/
 wala
 	analysis tools for javascript and java.
->>>>>>> 5758c6919da060ee1b4024010ad6e6facc27983d
 
 Commands:
 For dependency on imread
