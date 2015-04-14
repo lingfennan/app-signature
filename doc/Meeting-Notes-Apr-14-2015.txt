@@ -1,0 +1,33 @@
+Meeting Notes:
+1. Stop exploring the image matching algorithms, and icon matching.
+
+2. Focus on Copyright Violation Library Detection
+2.1 Identify entry point of a library
+2.2 Compare method name (sub-graph is too complex, reduce the problem to string matching (NP-complete vs P)
+
+3. Collect libraries (media, audio processing libraries)
+3.1 Try something simple, get heuristics
+3.2 Code search engine
+3.3 Prediction service by Google
+3.3.1 Gives similarity or something else in the input
+
+4. Can we use simhash to estimate subset testing problem?
+We can use bloomfilter to estimate the subset testing problem!!!
+Can we use bloomfilter to estimate the similarity between two sets?
+
+5. This algorithm, what property does it hold?
+For feature set a = {a1, a2, a3, ..., an}
+maintain vector v[128]
+h(a1) = (high) 1 0 0 ... 0 1 1 (low) -> v[0] += 1, v[1] += 1, v[2] += 0, ... -> v[126] += 0, v[127] += 1
+h(a2) = ...
+...
+h(an) = ...
+
+H(a) = v[128]
+Dist(a, b) = sum(v_a[128] - v_b[128])
+Maximum(Dist(a, b) = max(N_a, N_b) * 128
+
+6. Ideas:
+Search copyrighted libraries
+Search vulnerable libraries
+
