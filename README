@@ -14,6 +14,9 @@ dex2jar
 	http://sourceforge.net/p/dex2jar/wiki/Faq/
 wala
 	analysis tools for javascript and java.
+susi
+	a tool to automatically discover sources and sinks in the Android
+framework
 
 Commands:
 For dependency on imread
