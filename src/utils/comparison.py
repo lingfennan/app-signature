@@ -134,11 +134,12 @@ def compare(infile, compare_list, outfile=None):
 			apk_records_dict.update(comp_digest,
 					file_entry.comparison)
 		file_entry.common_count = len(in_set & compare_set)
+		file_entry.common_ratio = (float(file_entry.common_count) / 
+				max(len(in_set), len(compare_set)))
 
 	# Write the results to file.
 	apk_records_dict.save()
 	print result
-	print apk_records_dict.global_file_entry_dict
 	if outfile:
 		write_proto_to_file(result, outfile)
 	return result

@@ -21,6 +21,7 @@ message DigestComparisonResult {
 message CompareFileEntry {
   required APKRecord comparison = 1;
   required int32 common_count = 2;
+  optional double common_ratio = 3;
 }
 
 message APKDatabase {
