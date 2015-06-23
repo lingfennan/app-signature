@@ -1,0 +1,33 @@
+package apk_analysis;
+
+message APKRecord {
+  // The basic record for each computed file
+  required string digest = 1;
+  required string filename = 2;
+  required string asset_digest_filename = 3;
+  required int32 asset_count = 4;
+}
+
+message EvaluationPB {
+  repeated DigestComparisonResult result = 1;
+  optional string timestamp = 2;
+}
+
+message DigestComparisonResult {
+  required APKRecord current = 1;
+  repeated CompareFileEntry file_entry = 2;
+}
+
+message CompareFileEntry {
+  required APKRecord comparison = 1;
+  required int32 common_count = 2;
+}
+
+message APKDatabase {
+  // This database is used to store all the computed information
+  // It can be used to look up files / digests that have been computed
+  // (hashdeep) and get final result if previously computed. Therefore, this
+  // saves time.
+  repeated APKRecord record = 1;
+  required int32 total = 2;
+}

@@ -16,9 +16,15 @@ wala
 	analysis tools for javascript and java.
 susi
 	a tool to automatically discover sources and sinks in the Android
+apktool
+	decompile to smali code
+hashdeep
+	compute hashs in batch and compare
 framework
 
 Commands:
 For dependency on imread
 	sudo pip install Pillow==2.6.0
+
+
 
