@@ -8,6 +8,11 @@ compute similarity between one digest file against a list of digest files,
 output result for each pair:
 python comparison.py -f compare -i digest_file -c compare_against -o compare_results
 
+# Test the commands
+python comparison.py -f compare -i
+../../data/sdk_lib/GPL_libs/ffmpeg-android-master.zip -c
+../../data/sdk_lib/F-droid-apps/gpl_download/compare_list -o temp
+
 """
 # Author: Ruian Duan
 # Contact: duanruian@gmail.com
@@ -20,59 +25,9 @@ import re
 import proto.apk_analysis_pb2 as evalpb
 
 from util import (get_hexdigest, write_proto_to_file, read_proto_from_file, 
-		GlobalFileEntryDict)
-
-# CONSTANTS
-HASHDEEP_SUFFIX = ".hashdeep"
-
-def digest(infile, outfile=None):
-	"""
-	hashdeep -r dir, pipe to a file
-	@parameter
-	infile: the input file or directory name
-	outfile: output file name
-	@return
-	True if success otherwise False
-	"""
-	apk_suffix = ".apk"
-	zip_suffix = ".zip"
-	# If outfile is not specified
-	if not outfile:
-		outfile = infile + HASHDEEP_SUFFIX
-	""" Step 1: De-compress the file first """
-	if infile.endswith(apk_suffix):
-		unpack = infile[:-4]
-		p1 = subprocess.Popen(["apktool", "d", infile, "-o", unpack],
-				stdout=subprocess.PIPE)
-		output, error = p1.communicate()
-		infile = unpack
-	elif infile.endswith(zip_suffix):
-		unpack = infile[:-4]
-		p1 = subprocess.Popen(["unzip", infile, "-d", unpack],
-				stdout=subprocess.PIPE)
-		output, error = p1.communicate()
-		infile = unpack
-	# The input of hashdeep need to be absolute path, otherwise, there will
-	# be bug.
-	infile = os.path.abspath(infile)
-
-	""" Step 2: Compute Hash """
-	p = subprocess.Popen(['hashdeep', '-r', infile], stdout=subprocess.PIPE)
-	output, error = p.communicate()
-	open(outfile, 'w').write(output)
-
-	""" Step 3: Remove the decompressed files """
-	p = subprocess.Popen(['rm', '-r', infile], stdout=subprocess.PIPE)
-	output, error = p.communicate()
-
-	return False if error else True
-
-def digest_batch(infile, outdir=None):
-	infile_list = filter(bool, open(infile, 'r').read().split('\n'))
-	for infile in infile_list:
-		outfile = (outdir + infile.split("/")[-1] + HASHDEEP_SUFFIX if
-				outdir else None)
-		digest(infile, outfile)
+		GlobalFileEntryDict, unpack, remove, find_text_in_dir, digest,
+		digest_batch)
+from util import GPL_STRING, HASHDEEP_SUFFIX 
 
 def _get_digest_set(filename):
 	"""get the sha256 digest set from hashdeep output.
@@ -109,7 +64,12 @@ def compare(infile, compare_list, outfile=None):
 		result.current.filename = infile
 		asset_filename = infile + HASHDEEP_SUFFIX
 		result.current.asset_digest_filename = asset_filename
+		infile = unpack(infile)
 		digest(infile, asset_filename)
+		gpl_files = find_text_in_dir(infile, GPL_STRING)
+		if len(gpl_files) > 0:
+			result.current.matches.smali_filename.extend(gpl_files)
+		remove(infile)
 	in_set = _get_digest_set(result.current.asset_digest_filename)
 	if not apk_records_dict.contains(in_digest):
 		result.current.asset_count = len(in_set)
@@ -127,7 +87,12 @@ def compare(infile, compare_list, outfile=None):
 			file_entry.comparison.filename = compare_digest_file
 			asset_filename = compare_digest_file + HASHDEEP_SUFFIX
 			file_entry.comparison.asset_digest_filename = asset_filename
+			compare_digest_file = unpack(compare_digest_file)
 			digest(compare_digest_file, asset_filename)
+			gpl_files = find_text_in_dir(compare_digest_file, GPL_STRING)
+			if len(gpl_files) > 0:
+				file_entry.comparison.matches.smali_filename.extend(gpl_files)
+			remove(compare_digest_file)
 		compare_set = _get_digest_set(file_entry.comparison.asset_digest_filename)
 		if not apk_records_dict.contains(comp_digest):
 			file_entry.comparison.asset_count = len(compare_set)
@@ -182,7 +147,9 @@ def main(argv):
 		if batch:
 			digest_batch(infile, outfile)
 		else:
+			infile = unpack(infile)
 			digest(infile, outfile)
+			remove(infile)
 	elif function == "compare":
 		compare(infile, compare_list, outfile)
 	else:

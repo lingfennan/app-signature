@@ -6,6 +6,11 @@ message APKRecord {
   required string filename = 2;
   required string asset_digest_filename = 3;
   required int32 asset_count = 4;
+  optional GPLMatches matches = 5;
+}
+
+message GPLMatches {
+  repeated string smali_filename = 1;
 }
 
 message EvaluationPB {

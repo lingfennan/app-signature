@@ -1,12 +1,91 @@
 import hashlib
 import os
+import subprocess
 import proto.apk_analysis_pb2 as evalpb
+
+
+"""
+CONSTANTS
+"""
+GPL_STRING = "GPL"
+HASHDEEP_SUFFIX = ".hashdeep"
+
+"""
+Utilities for app processing
+"""
+def unpack(infile):
+	""" unpack the file 
+	@parameter
+	infile: zip or apk file
+	@return
+	unpack: the output directory
+	"""
+	apk_suffix = ".apk"
+	zip_suffix = ".zip"
+	if infile.endswith(apk_suffix):
+		unpack = infile[:-4]
+		p1 = subprocess.Popen(["apktool", "d", infile, "-o", unpack],
+				stdout=subprocess.PIPE)
+		output, error = p1.communicate()
+	elif infile.endswith(zip_suffix):
+		unpack = infile[:-4]
+		p1 = subprocess.Popen(["unzip", infile, "-d", unpack],
+				stdout=subprocess.PIPE)
+		output, error = p1.communicate()
+	else:
+		raise Exception("Unhandled file extension")
+	return unpack
+
+def digest(infile, outfile=None):
+	"""
+	hashdeep -r dir, pipe to a file
+	@parameter
+	infile: the input file or directory name
+	outfile: output file name
+	@return
+	True if success otherwise False
+	"""
+	# If outfile is not specified
+	if not outfile:
+		outfile = infile + HASHDEEP_SUFFIX
+	# The input of hashdeep need to be absolute path, otherwise, there will
+	# be bug.
+	infile = os.path.abspath(infile)
+	p = subprocess.Popen(['hashdeep', '-r', infile], stdout=subprocess.PIPE)
+	output, error = p.communicate()
+	open(outfile, 'w').write(output)
+	return False if error else True
+
+def remove(indir):
+	""" Remove the decompressed files """
+	p = subprocess.Popen(['rm', '-r', indir], stdout=subprocess.PIPE)
+	output, error = p.communicate()
+	return False if error else True
+
+def find_text_in_dir(indir, text):
+	""" Find files containing text in directory """
+	p = subprocess.Popen(['grep', '-rl', text, indir],
+			stdout=subprocess.PIPE)
+	output, error = p.communicate()
+	return filter(bool, output.split("\n"))
 
 def get_hexdigest(infile, func = "sha256"):
 	m = getattr(hashlib, func)()
 	m.update(open(infile, 'r').read())
 	return m.hexdigest()
 
+def digest_batch(infile, outdir=None):
+	infile_list = filter(bool, open(infile, 'r').read().split('\n'))
+	for infile in infile_list:
+		outfile = (outdir + infile.split("/")[-1] + HASHDEEP_SUFFIX if
+				outdir else None)
+		infile = unpack(infile)
+		digest(infile, outfile)
+		remove(infile)
+
+"""
+Utilities for protocol buffer
+"""
 def write_proto_to_file(proto, filename):
 	f = open(filename, "wb")
 	f.write(proto.SerializeToString())
@@ -25,7 +104,7 @@ def write_proto_to_files(proto, field, filenames):
 
 class GlobalFileEntryDict:
 	def __init__(self):
-		self.GLOBAL_FILE_ENTRY = "../../data/sdk_lib/global_file_entry.dat"
+		self.GLOBAL_FILE_ENTRY = "../../data/global_app_entry.dat"
 		global_file_entry = evalpb.APKDatabase()
 		"""
 		If file already exists, just reload it.
