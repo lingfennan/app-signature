@@ -1,0 +1,15 @@
+False positive:
+high similarity, but these are smali files that should be whitelisted.
+
+From android/support/v4
+
+Bad app
+../../data/mengApks/googleplay-2/com.holoandroid.acnecausesandprevention-1.apk
+	Claim to be acne cause prevention, but does nothing except open a web page with
+	several links for monetizing
+GPL app
+../../data/sdk_lib/F-droid-apps/gpl_download/com.timvdalen.gizmooi_5.apk
+	Widget app. Uses android/support/v4
+
+TODO:
+white list asset digests and smali digests.

@@ -6,7 +6,7 @@ message APKRecord {
   required string filename = 2;
   required string asset_digest_filename = 3;
   required int32 asset_count = 4;
-  optional GPLMatches matches = 5;
+  optional GPLMatches gpl_matches = 5;
 }
 
 message GPLMatches {

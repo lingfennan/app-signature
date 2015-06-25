@@ -62,9 +62,10 @@ def remove(indir):
 	output, error = p.communicate()
 	return False if error else True
 
-def find_text_in_dir(indir, text):
+def find_text_in_dir(indir, text, ignore_binary=True):
 	""" Find files containing text in directory """
-	p = subprocess.Popen(['grep', '-rl', text, indir],
+	flags = '-rlI' if ignore_binary else '-rl'
+	p = subprocess.Popen(['grep', flags, text, indir],
 			stdout=subprocess.PIPE)
 	output, error = p.communicate()
 	return filter(bool, output.split("\n"))
@@ -102,6 +103,9 @@ def read_proto_from_files(proto, field, filenames):
 def write_proto_to_files(proto, field, filenames):
 	"""For repeated proto only"""
 
+"""
+Utilities for logging 
+"""
 class GlobalFileEntryDict:
 	def __init__(self):
 		self.GLOBAL_FILE_ENTRY = "../../data/global_app_entry.dat"

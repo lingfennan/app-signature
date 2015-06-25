@@ -1,5 +1,20 @@
 exmample sdk, applications.
 
-
 The free software that has AGPL license.
 http://fossdroid.com
+
+3rd-market-icons/
+	icons for 3rd market apps
+google-play-icons/
+	icons for google play apps
+icon-matching/
+	directories created for measuring and testing
+	image comparison algorithms
+unofficialApks/
+	unofficial apks shared by Chenxiong
+flexdroid/
+	apks shared by Taesoo from KAIST
+mengApks/
+	google play apps shaared by meng xu
+sdk_lib/
+	apks from web

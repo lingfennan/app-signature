@@ -56,7 +56,8 @@ def gpl(outfile):
 				print app
 				print app_license
 				raise Exception("Wrong number of matches!")
-			if "GPL" in app_license[0]:
+			# find apps that have GPL license
+			if ("GPL" in app_license[0]) and ("LGPL" not in app_license[0]):
 				outf.write(app + "\n")
 
 def download(infile, outdir):
@@ -71,6 +72,24 @@ def download(infile, outdir):
 		# only retrieve the most recent result
 		retrieve(apk_link[0], outdir + "/" + apk_link[0].split("/")[-1])
 		retrieve(src_link[0], outdir + "/" + src_link[0].split("/")[-1])
+
+def class_names(app_path):
+	APP_ROOT = "/".join(app_path.split("/")[:-1])
+	return
+
+def find_violation(free, proprietary):
+	"""
+	Get the total package name
+	aapt dump badging net.sf.times_31.apk | grep package:\ name
+
+	find . -name \*.smali
+
+	tree -if --noreport .
+
+	"""
+	
+
+	return
 
 def main(argv):
 	has_function = False
