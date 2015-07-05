@@ -7,6 +7,8 @@ message APKRecord {
   required string asset_digest_filename = 3;
   required int32 asset_count = 4;
   optional GPLMatches gpl_matches = 5;
+  // Digests after removing whitelist.
+  optional string valid_digest_filename = 6;
 }
 
 message GPLMatches {
@@ -36,4 +38,24 @@ message APKDatabase {
   // saves time.
   repeated APKRecord record = 1;
   required int32 total = 2;
+}
+
+message DigestCounter {
+  // For all hashdeep digest outputs, record count for asset digest or smali
+  // digest
+  repeated DigestEntry entry = 1;
+}
+
+message DigestEntry {
+  enum FileType {
+    SMALI = 0;
+    IMAGE = 1;
+    XML = 2;
+    VIDEO = 3;
+    UNKNOWN = 4;
+  }
+  required bytes digest = 1;
+  required int32 count = 2;
+  optional string sample_filename = 3;
+  optional FileType file_type = 4;
 }

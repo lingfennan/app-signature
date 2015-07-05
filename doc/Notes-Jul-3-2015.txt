@@ -1,0 +1,12 @@
+There are five categories of unwanted behavior in Android Applications
+
+1. App Impersonation
+
+2. Excessive Ads
+
+3. Bundle Install
+
+4. Unwanted Modification
+
+5. Privacy Leak
+

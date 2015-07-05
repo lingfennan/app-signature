@@ -31,7 +31,7 @@ import proto.apk_analysis_pb2 as evalpb
 
 from util import (get_hexdigest, write_proto_to_file, read_proto_from_file, 
 		GlobalFileEntryDict, unpack, remove, find_text_in_dir, digest,
-		digest_batch)
+		digest_batch, get_digest_dict)
 from util import GPL_STRING, HASHDEEP_SUFFIX 
 
 def find_violation(gpl_list, non_gpl_list, outfile):
@@ -54,10 +54,7 @@ def find_violation(gpl_list, non_gpl_list, outfile):
 def _get_digest_set(filename):
 	"""get the sha256 digest set from hashdeep output.
 	"""
-	digest_list = filter(bool, open(filename, 'r').read().split('\n'))
-	digest_list = [digest.split(',')[2] for digest in digest_list 
-			if (digest[0] not in "%#")]
-	digest_set = set(digest_list)
+	digest_set = set(get_digest_dict(filename).keys())
 	return digest_set
 
 def compare(infile, compare_list, outfile=None, similarity_bar=0):

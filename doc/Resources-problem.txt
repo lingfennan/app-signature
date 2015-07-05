@@ -1,0 +1,32 @@
+1. How does the resource identifier work?
+@type/name, for string
+
+@dir/name, for drawable
+
+2. How we can define android label (app name)
+Raw string
+app name can be defined in res/values/strings.xml
+app name can be defined in res/values/styles.xml
+app name cannot be defined in assets/, res/drawable/
+
+Meaning that, android search res/values* for available names
+
+3. How can we define android icon (app icon)
+http://developer.android.com/reference/android/graphics/drawable/Drawable.html
+
+http://developer.android.com/guide/topics/graphics/2d-graphics.html#drawables
+.png, .jpg, .gif
+
+a.	res/mipmap/icon.jpg  @mipmap/icon
+	res/raw/my_icon.jpg  @raw/my_icon
+	res/xxx/icon.png  @xxx/icon
+
+b.	9 patch is used for define image behavior when stretch happens
+	res/raw/nine.9.png
+	res/raw/nine.7.png
+	res/raw/bad.hahah.png  @raw/bad
+	Therefore, drawables are mathed with
+	they are all tested!
+
+4. Drawable files are indexed in this way
+'res/' + $DIRECTORY + '-dmpi/' + $FILENAME + '.xxx.png'

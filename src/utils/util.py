@@ -13,6 +13,31 @@ HASHDEEP_SUFFIX = ".hashdeep"
 """
 Utilities for app processing
 """
+def get_file_type(filename):
+	if filename.endswith('.smali'):
+		return evalpb.DigestEntry.SMALI
+	elif filename.lower().endswith(('.png', '.jpg', '.bmp', '.jpeg', '.gif',
+		'.tif')):
+		return evalpb.DigestEntry.IMAGE
+	elif filename.lower().endswith('.xml'):
+		return evalpb.DigestEntry.XML
+	elif filename.lower().endswith('.mp4', '.flv', '.mkv', '.avi', '.wmv',
+			'.rm', '.rmvb', '.mpeg', '.mpg', '.m4v', '.ogg'):
+		return evalpb.DigestEntry.VIDEO
+	else:
+		return evalpb.DigestEntry.UNKNOWN
+
+def get_digest_dict(filename):
+	"""get the sha256 digest and filename mapping from hashdeep output.
+	"""
+	digest_list = filter(bool, open(filename, 'r').read().split('\n'))
+	digest_dict = dict()
+	for digest_line in digest_list:
+		if digest_line[0] not in "%#":
+			_, _, digest, filepath = digest_line.split(',')
+			digest_dict[digest] = filepath.split('app-signature')[1]
+	return digest_dict
+
 def unpack(infile):
 	""" unpack the file 
 	@parameter
