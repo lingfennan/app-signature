@@ -21,8 +21,9 @@ def get_file_type(filename):
 		return evalpb.DigestEntry.IMAGE
 	elif filename.lower().endswith('.xml'):
 		return evalpb.DigestEntry.XML
-	elif filename.lower().endswith('.mp4', '.flv', '.mkv', '.avi', '.wmv',
-			'.rm', '.rmvb', '.mpeg', '.mpg', '.m4v', '.ogg'):
+        # Tuple
+	elif filename.lower().endswith(('.mp4', '.flv', '.mkv', '.avi', '.wmv',
+			'.rm', '.rmvb', '.mpeg', '.mpg', '.m4v', '.ogg')):
 		return evalpb.DigestEntry.VIDEO
 	else:
 		return evalpb.DigestEntry.UNKNOWN
