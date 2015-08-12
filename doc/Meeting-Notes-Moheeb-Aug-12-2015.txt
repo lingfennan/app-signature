@@ -1,0 +1,27 @@
+Moheeb:
+1. General problems in Mobile Unwanted Software.
+exessive ads
+unwanted modification
+bundle install
+privacy leak
+impersonation
+
+2. How to identify the original app / victim?
+This is a research problemm.
+Use heuristics + automated technique.
+Are there good solutions for this?
+
+3. Measure the incentives of impersonation and explain or provide detection.
+Need samples of impersonating apps. 
+3a. Collaboration. Share samples, join discussion and provide insights.
+3b. Work as part-time researcher. Use Google's system and infrastructure to
+detect.
+
+
+Next steps:
+1. talk with Wenke to see whether this is an interesting problem space
+2. decide the scope of paper
+3. talk with Monirul to see whether he is interested in exploring this space and
+collaboration
+4. what we can do, what we can share, what we can collaborate
+
