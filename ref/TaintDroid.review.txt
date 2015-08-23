@@ -1,0 +1,51 @@
+# name: Ruian Duan
+# date: 07/26/2016
+# title: TaintDroid: An Information-Flow Tracking System for Realtime Privacy Monitoring on Smartphones
+
+1. what's the problem?
+Smartphones have various kinds of personal information. Access to them requires corresponding permission. These permissions are given at install time and there is no good way to track how they use these permission (2010) / information after they get installed at runtime.
+
+Previous works [57, 7] rely on whole system emulation to track information flow, which introduces high overhead (2-20 times slowdown), hence not feasible to run on real phone. Researchers and security companies need to run applications as well as understand what has happened in the background, and this paper proposes a dynamic taint system to efficiently detect information leakage. 
+
+2. why should we care?
+Android is popular. Smartphone contains various kinds of important information, ranging from contacts, phone number, real time location (and even credit card information in the future? because Android pay is coming). Users and market owners don’t want these information to be collected at the developer’s will. Thus, we need a way to analyze / run application, and find out what is happening in the background.
+
+Note:
+Android M is coming out (later this year with Nexus ??), it will support runtime permission, which means access to sensitive information can be given / disabled at runtime, making the system better for user control, e.g. user could prevent access to location when he runs Google Map.
+
+3. what's the key idea to solve this problem?
+They manually decide the sensitive information (source), e.g. location, contacts.
+The sink is network in this paper.
+
+In order to track information flow, this paper proposes a dynamic taint analysis framework, which tracks sensitive information at different levels: 
+a. within dalvik, variable level
+main idea: define the rule of taint propagation
+b. dalvik calls native library, JNI (application calls via JNI bridge), method level
+main idea: internal VM methods, inspect and profile manually.
+JNI profiles need to be built automatically, because there is too much. This paper simplifies the problem, mark the taint for return value with the union of input parameters.
+c. between application, message level
+d. file reads and write, file level
+
+4. how can we believe their solution?
+The methodology and tradeoffs sound reasonable, and the evaluation results are quite good. 
+But there are assumptions that may not be true. The JNI assumption.
+
+5. what can we get from their approach?
+I finally understand how dynamic taint analysis works.
+
+There are several problems remained when this paper is written.
+a. How to automatically find sources and links? Solution: Susi
+b. JNI is not tainted / profiled. Can we do this automatically? Solution: NDroid
+c. How to automatically navigate application?
+d. Static analysis of application is feasible?
+e. Can TaintDroid be detected and evaded?
+The API to add and retrieve taint, does application have access to it? I don’t know yet.
+f. How to decide whether a specific leak is intended by user or not?
+No good one now. Solution: AppIntent
+
+6. TODO
+a. Implementation detail regarding TaintDroid?
+b. Why does android design dalvik virtual machine register-based versus java virtual machine stack-based?
+c. What is on demand static analysis?
+d. How NDroid works (taint JNI)?
+e. According to taint droid, location data is sent in binary or text, how can we detect binary?

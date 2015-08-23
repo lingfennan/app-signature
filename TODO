@@ -1,2 +1,6 @@
 This app has two versions in Google Play. What are they doing?
 https://github.com/quran/quran_android
+
+marmot
+baksmali+daapt: unpack apk file
+smali: build file

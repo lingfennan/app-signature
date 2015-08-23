@@ -1,0 +1,30 @@
+# name: Ruian Duan
+# date: 07/26/2015
+On the Effectiveness of Dynamic Taint Analysis for Protecting Against Private Information Leaks on Android-based Devices
+
+1. what's the problem?
+TaintDroid employs dynamic taint analysis to detect information leakage. But how effective is it, can a determined attacker get around with their approach? Can we detect whether TaintDroid exists? We want to answer these questions.
+
+2. why should we care?
+TaintDroid is designed to track information leakage at runtime. The attack model is that developer is untrusted. With this strong assumption, we have to step back and see whether a determined attacker could evade detection. This research helps understand limitations of dynamic taint analysis or implementation drawbacks of taintdroid.
+
+3. what's the key idea to solve this problem?
+Taint can be removed. This paper design several attacks to remove taint on data and bypass detection of TaintDroid.
+a. Control dependence-based attack.
+TaintDroid only tracks direct assignment of data flow, if we use control flow to get data, TaintDroid of dynamic taint analysis alone cannot catch it.
+b. Subversion of benign code
+Execute system command on input, the taint may be removed. Because there is no direct variable assignment.
+c. Side channels
+timing attack, file length attack, clipboard length attack, bitmap cache attack, text scaling attack, direct buffer attack, remote control channel.
+
+4. how can we believe their solution?
+Attack paper is easier to write than defense ones. Because you just need to have the attack work.
+
+5. anything surprising?
+According to the paper, instruction level taint analysis (full system emulation) might be able to defend subversion of benign code. But for side channels and control dependence-based attack, it is very hard. I am surprised that dynamic taint analysis is so easy to be bypassed.
+
+6. what can we get from their approach?
+This paper addresses some limitations of both TaintDroid and generic taint analysis approach.
+Besides, I found a way to detect emulator environment.
+https://github.com/strazzere/anti-emulator
+So, we can detect an emulator, and we can bypass it. LoL.

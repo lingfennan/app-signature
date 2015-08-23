@@ -8,6 +8,8 @@ import proto.apk_analysis_pb2 as evalpb
 CONSTANTS
 """
 GPL_STRING = "GPL"
+LICENCE_FILENAME = "license"
+
 HASHDEEP_SUFFIX = ".hashdeep"
 
 """
