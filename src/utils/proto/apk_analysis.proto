@@ -56,6 +56,6 @@ message DigestEntry {
   }
   required bytes digest = 1;
   required int32 count = 2;
-  optional string sample_filename = 3;
+  optional bytes sample_filename = 3;
   optional FileType file_type = 4;
 }

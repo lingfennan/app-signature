@@ -20,6 +20,9 @@ apktool
 	decompile to smali code
 hashdeep
 	compute hashs in batch and compare
+androguard
+	Reverse engineering, Malware and goodware analysis of Android applications ... and MORE.
+	https://github.com/androguard/androguard.git
 framework
 
 Commands:

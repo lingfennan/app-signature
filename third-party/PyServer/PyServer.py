@@ -37,11 +37,13 @@ class ServerHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
     def do_GET(self):
         logging.warning("======= GET STARTED =======")
+	logging.warning(self.client_address[0])
         logging.warning(self.headers)
         SimpleHTTPServer.SimpleHTTPRequestHandler.do_GET(self)
 
     def do_POST(self):
         logging.warning("======= POST STARTED =======")
+	logging.warning(self.client_address[0])
         logging.warning(self.headers)
         form = cgi.FieldStorage(
             fp=self.rfile,
