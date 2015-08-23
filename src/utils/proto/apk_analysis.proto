@@ -9,10 +9,13 @@ message APKRecord {
   optional GPLMatches gpl_matches = 5;
   // Digests after removing whitelist.
   optional string valid_digest_filename = 6;
+  // size of the apk file.
+  optional int32 file_size = 7;
 }
 
 message GPLMatches {
   repeated string smali_filename = 1;
+  repeated string asset_filename = 2;
 }
 
 message EvaluationPB {
@@ -53,9 +56,10 @@ message DigestEntry {
     XML = 2;
     VIDEO = 3;
     UNKNOWN = 4;
+    LICENSE = 5;
   }
   required bytes digest = 1;
-  required int32 count = 2;
+  optional int32 count = 2;
   optional bytes sample_filename = 3;
   optional FileType file_type = 4;
 }

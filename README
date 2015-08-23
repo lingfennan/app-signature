@@ -24,6 +24,8 @@ androguard
 	Reverse engineering, Malware and goodware analysis of Android applications ... and MORE.
 	https://github.com/androguard/androguard.git
 framework
+threadpool
+	sudo pip install threadpool
 
 Commands:
 For dependency on imread

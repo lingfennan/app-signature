@@ -3,14 +3,7 @@ import os
 import subprocess
 import proto.apk_analysis_pb2 as evalpb
 
-
-"""
-CONSTANTS
-"""
-GPL_STRING = "GPL"
-LICENCE_FILENAME = "license"
-
-HASHDEEP_SUFFIX = ".hashdeep"
+from util_constants import GPL_STRING, LICENCE_FILENAME, HASHDEEP_SUFFIX
 
 """
 Utilities for app processing
@@ -23,7 +16,7 @@ def get_file_type(filename):
 		return evalpb.DigestEntry.IMAGE
 	elif filename.lower().endswith('.xml'):
 		return evalpb.DigestEntry.XML
-        # Tuple
+		# Tuple
 	elif filename.lower().endswith(('.mp4', '.flv', '.mkv', '.avi', '.wmv',
 			'.rm', '.rmvb', '.mpeg', '.mpg', '.m4v', '.ogg')):
 		return evalpb.DigestEntry.VIDEO
@@ -90,11 +83,27 @@ def remove(indir):
 	output, error = p.communicate()
 	return False if error else True
 
-def find_text_in_dir(indir, text, ignore_binary=True):
-	""" Find files containing text in directory """
+def find_text_in_dir(indir, text, ignore_binary=True, ignore_case=False):
+	"""
+	Find files containing text in directory using grep.
+	:param indir: the directory to search in.
+	:param text: regular expression to match.
+	:param ignore_binary: ignore binary files.
+	:param ignore_case: case-insensitivity.
+	:return: list of string, split output of grep.
+	"""
 	flags = '-rlI' if ignore_binary else '-rl'
 	p = subprocess.Popen(['grep', flags, text, indir],
 			stdout=subprocess.PIPE)
+	output, error = p.communicate()
+	return filter(bool, output.split("\n"))
+
+def find_file_in_dir(indir, filename, ignore_case=True):
+	"""Find file containing filename in directory using find."""
+	# Do we really need this now?
+	flags = '-iname' if ignore_case else '-name'
+	p = subprocess.Popen(['find', indir, flags, filename],
+						 stdout=subprocess.PIPE)
 	output, error = p.communicate()
 	return filter(bool, output.split("\n"))
 

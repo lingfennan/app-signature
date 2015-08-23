@@ -29,10 +29,10 @@ import re
 from time import gmtime, strftime
 import proto.apk_analysis_pb2 as evalpb
 
-from util import (get_hexdigest, write_proto_to_file, read_proto_from_file, 
-		GlobalFileEntryDict, unpack, remove, find_text_in_dir, digest,
-		digest_batch, get_digest_dict)
-from util import GPL_STRING, HASHDEEP_SUFFIX 
+from util import (get_hexdigest, get_file_type,write_proto_to_file, read_proto_from_file,
+				  GlobalFileEntryDict, unpack, remove, find_text_in_dir, digest,
+				  digest_batch, get_digest_dict)
+from util_constants import GPL_STRING, HASHDEEP_SUFFIX
 
 def find_violation(gpl_list, non_gpl_list, outfile):
 	"""Compare similarit betwen files in gpl_list and non_gpl_list. 
@@ -51,7 +51,7 @@ def find_violation(gpl_list, non_gpl_list, outfile):
 		eval_result.CopyFrom(result)
 	write_proto_to_file(evaluation, outfile)
 
-def _get_digest_set(filename):
+def get_digest_set(filename):
 	"""get the sha256 digest set from hashdeep output.
 	"""
 	digest_set = set(get_digest_dict(filename).keys())
@@ -87,9 +87,14 @@ def compare(infile, compare_list, outfile=None, similarity_bar=0):
 		digest(infile, asset_filename)
 		gpl_files = find_text_in_dir(infile, GPL_STRING)
 		if len(gpl_files) > 0:
-			result.current.gpl_matches.smali_filename.extend(gpl_files)
+			smali_filenames = []
+			asset_filenames = []
+			for f in gpl_files:
+				smali_filenames.append(f) if get_file_type(f) == evalpb.DigestEntry.SMALI else asset_filenames.append(f)
+			result.current.gpl_matches.smali_filename.extend(smali_filenames)
+			result.current.gpl_matches.asset_filename.extend(asset_filenames)
 		remove(infile)
-	in_set = _get_digest_set(result.current.asset_digest_filename)
+	in_set = get_digest_set(result.current.asset_digest_filename)
 	if not apk_records_dict.contains(in_digest):
 		result.current.asset_count = len(in_set)
 		apk_records_dict.update(in_digest, result.current)
@@ -110,9 +115,14 @@ def compare(infile, compare_list, outfile=None, similarity_bar=0):
 			digest(compare_digest_file, asset_filename)
 			gpl_files = find_text_in_dir(compare_digest_file, GPL_STRING)
 			if len(gpl_files) > 0:
-				file_entry.comparison.gpl_matches.smali_filename.extend(gpl_files)
+				smali_filenames = []
+				asset_filenames = []
+				for f in gpl_files:
+					smali_filenames.append(f) if get_file_type(f) == evalpb.DigestEntry.SMALI else asset_filenames.append(f)
+				file_entry.comparison.gpl_matches.smali_filename.extend(smali_filenames)
+				file_entry.comparison.gpl_matches.asset_filename.extend(asset_filenames)
 			remove(compare_digest_file)
-		compare_set = _get_digest_set(file_entry.comparison.asset_digest_filename)
+		compare_set = get_digest_set(file_entry.comparison.asset_digest_filename)
 		if not apk_records_dict.contains(comp_digest):
 			file_entry.comparison.asset_count = len(compare_set)
 			apk_records_dict.update(comp_digest,
