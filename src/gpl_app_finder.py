@@ -11,8 +11,9 @@ import sys, getopt, math
 import subprocess
 import commands
 import re
+import time
 from time import gmtime, strftime
-from multiprocessing import Pool
+from multiprocessing import Pool, cpu_count, Manager
 from utils.util_constants import HASHDEEP_SUFFIX, GPL_STRING
 
 import utils.proto.apk_analysis_pb2 as evalpb
@@ -21,13 +22,13 @@ from utils.util import (get_hexdigest, get_file_type, write_proto_to_file, read_
                         digest_batch, get_digest_dict)
 from utils.comparison import get_digest_set
 
-play_app_dict = GlobalFileEntryDict('../data/flexdroid/play_gpl_apps')
 
-def find_gpl(apk_file):
+def find_gpl(apk_file, helper_dict):
     in_digest = get_hexdigest(apk_file)
-    if play_app_dict.contains(in_digest):
+    logging.info('processing %s, digest is %s' % (apk_file, in_digest))
+    if in_digest in helper_dict:
         # Already computed
-        return
+        return None
     record = evalpb.APKRecord()
     record.digest = in_digest
     record.filename = apk_file
@@ -44,22 +45,43 @@ def find_gpl(apk_file):
         record.gpl_matches.smali_filename.extend(smali_filenames)
         record.gpl_matches.asset_filename.extend(asset_filenames)
     remove(indir)
-    compare_set = get_digest_set(record.asset_digest_filename)
-    if not play_app_dict.contains(in_digest):
-        record.asset_count = len(compare_set)
-        play_app_dict.update(in_digest, record)
-        play_app_dict.save()
+    in_set = get_digest_set(record.asset_digest_filename)
+    record.asset_count = len(in_set)
+    helper_dict[in_digest] = record.SerializeToString()
+    return in_digest
 
-def find_gpl_parallel(inlist, poolsize=8):
+def find_gpl_parallel(inlist, poolsize=None):
+    play_app_dict = GlobalFileEntryDict('../data/flexdroid/play_gpl_apps')
+    m = Manager()
+    helper_dict = m.dict()
     pool = Pool(processes=poolsize)
-    pool.map(find_gpl, inlist)
+
+    def update_global_dict(in_digest):
+        if in_digest:
+            logging.info(in_digest)
+            record = evalpb.APKRecord()
+	    record.ParseFromString(helper_dict[in_digest])
+            play_app_dict.update(in_digest, record) 
+        else:
+            logging.info('null in_digest')
+
+    if not poolsize:
+        poolsize = cpu_count()
+    for fname in inlist:
+        pool.apply_async(find_gpl, args=(fname, helper_dict,), callback=update_global_dict)
+    # pool.map(find_gpl, inlist)
+    pool.close()
+    pool.join()
+    logging.info('pool.join')
+    logging.info(play_app_dict.size())
+    logging.info(play_app_dict.get_proto())
+    play_app_dict.save()
 
 def main(argv):
     logging.basicConfig(format='%(asctime)s - %(name)s - '
                                '%(levelname)s : %(message)s',
                         datefmt='%m/%d/%Y %I:%M:%S %p',
                         filename='./log', level=logging.DEBUG)
-
     help_msg = ("gpl_app_finder.py -f <function> [-i <apk_file> -o <digest_file>], find_gpl")
     try:
         opts, args = getopt.getopt(argv, "hf:i:o:", ["function=", "infile=", "outfile="])
@@ -91,3 +113,7 @@ def main(argv):
     else:
         print(help_msg)
         sys.exit()
+
+if __name__ == "__main__":
+        main(sys.argv[1:])
+
