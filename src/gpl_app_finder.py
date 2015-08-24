@@ -25,6 +25,9 @@ play_app_dict = GlobalFileEntryDict('../data/flexdroid/play_gpl_apps')
 
 def find_gpl(apk_file):
     in_digest = get_hexdigest(apk_file)
+    if play_app_dict.contains(in_digest):
+        # Already computed
+        return
     record = evalpb.APKRecord()
     record.digest = in_digest
     record.filename = apk_file
@@ -45,9 +48,10 @@ def find_gpl(apk_file):
     if not play_app_dict.contains(in_digest):
         record.asset_count = len(compare_set)
         play_app_dict.update(in_digest, record)
+        play_app_dict.save()
 
 def find_gpl_parallel(inlist, poolsize=8):
-    pool = Pool(processes=8)
+    pool = Pool(processes=poolsize)
     pool.map(find_gpl, inlist)
 
 def main(argv):
@@ -58,8 +62,7 @@ def main(argv):
 
     help_msg = ("gpl_app_finder.py -f <function> [-i <apk_file> -o <digest_file>], find_gpl")
     try:
-        opts, args = getopt.getopt(argv, "hf:i:o:",
-                                   ["function=", "infile=", "outfile="])
+        opts, args = getopt.getopt(argv, "hf:i:o:", ["function=", "infile=", "outfile="])
     except getopt.GetoptError:
         print(help_msg)
         sys.exit(2)
