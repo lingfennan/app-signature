@@ -144,7 +144,7 @@ def write_proto_to_files(proto, field, filenames):
 Utilities for logging 
 """
 class GlobalFileEntryDict:
-	def __init__(self, apk_database_file="../../data/global_app_entry.dat"):
+	def __init__(self, apk_database_file="../../data/global_app_entry.dat", period=10):
 		self.GLOBAL_FILE_ENTRY = apk_database_file
 		global_file_entry = evalpb.APKDatabase()
 		"""
@@ -156,6 +156,8 @@ class GlobalFileEntryDict:
 		self.global_file_entry_dict = dict()
 		for entry in global_file_entry.record:
 			self.global_file_entry_dict[entry.digest] = entry
+		self.counter = 0
+		self.PERIOD = period
 	
 	def contains(self, digest):
 		return digest in self.global_file_entry_dict
@@ -164,8 +166,13 @@ class GlobalFileEntryDict:
 		return self.global_file_entry_dict[digest]
 
 	def update(self, digest, record):
+		# save will automatically be called 
 		self.global_file_entry_dict[digest] = evalpb.APKRecord()
 		self.global_file_entry_dict[digest].CopyFrom(record)
+		self.counter += 1
+		if self.counter >= self.PERIOD:
+			self.counter = 0
+			self.save()
 	
 	def size(self):
 		return len(self.global_file_entry_dict)

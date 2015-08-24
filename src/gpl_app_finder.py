@@ -20,6 +20,7 @@ import utils.proto.apk_analysis_pb2 as evalpb
 from utils.util import (get_hexdigest, get_file_type, write_proto_to_file, read_proto_from_file,
                         GlobalFileEntryDict, unpack, remove, find_text_in_dir, digest,
                         digest_batch, get_digest_dict)
+from utils.show_proto import show_proto
 from utils.comparison import get_digest_set
 
 
@@ -75,14 +76,25 @@ def find_gpl_parallel(inlist, poolsize=None):
     logging.info('pool.join')
     logging.info(play_app_dict.size())
     logging.info(play_app_dict.get_proto())
-    play_app_dict.save()
+
+def show_gpl(infile):
+    def filter_func(proto):
+        new_proto = evalpb.APKDatabase()
+        for record in proto.record:
+            if record.HasField('gpl_matches'):
+                r = new_proto.record.add()
+                r.CopyFrom(record)
+        new_proto.total = len(new_proto.record)
+        return new_proto
+    show_proto(inputfile=infile, proto_type='APKDatabase', filter_func=filter_func)
 
 def main(argv):
     logging.basicConfig(format='%(asctime)s - %(name)s - '
                                '%(levelname)s : %(message)s',
                         datefmt='%m/%d/%Y %I:%M:%S %p',
                         filename='./log', level=logging.DEBUG)
-    help_msg = ("gpl_app_finder.py -f <function> [-i <apk_file> -o <digest_file>], find_gpl")
+    help_msg = ("gpl_app_finder.py -f <function> [-i <apk_file> -o <digest_file>], find_gpl, "
+                "[-i <apk database file>] show_gpl")
     try:
         opts, args = getopt.getopt(argv, "hf:i:o:", ["function=", "infile=", "outfile="])
     except getopt.GetoptError:
@@ -110,6 +122,8 @@ def main(argv):
     if function == "find_gpl":
         inlist = filter(bool, open(infile, 'r').read().split('\n'))
         find_gpl_parallel(inlist)
+    elif function == "show_gpl":
+        show_gpl(infile)
     else:
         print(help_msg)
         sys.exit()
