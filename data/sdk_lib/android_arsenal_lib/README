@@ -1,0 +1,17 @@
+gpl_list: all the GPL projects found on android arsenal.
+android_arsenal_*_gpl_list: breakdown of GPL projects
+
+free: HTML used to extract project link
+paid: same as free.
+battlefield: same as free.
+
+free_apps/
+paid_apps/
+battle_field_apps/
+	crawling of links in free/paid/battlefield
+projects:
+	downloaded zip files from android arsenal
+
+commands.sh:
+	recorded shell commands for generating GPL lists.
+

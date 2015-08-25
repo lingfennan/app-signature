@@ -1,3 +1,5 @@
+# These commands need to be run manually for now.
+
 # download the page
 wget https://android-arsenal.com/free
 # get the app links
