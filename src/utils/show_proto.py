@@ -1,3 +1,8 @@
+"""
+Example run:
+python show_proto.py -i ../../data/flexdroid/play_gpl_apps -p APKDatabase | less
+"""
+
 import sys, getopt
 import proto.apk_analysis_pb2 as evalpb
 

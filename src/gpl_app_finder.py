@@ -1,4 +1,8 @@
 __author__ = 'ruian'
+"""
+Example run:
+python gpl_app_finder.py -f show_gpl -i ../data/flexdroid/play_gpl_apps | less
+"""
 
 # 1. Try all the hashdeep files first. Find how many of them has license.txt.
 # 2. Find GPL string in all the files and list them.
